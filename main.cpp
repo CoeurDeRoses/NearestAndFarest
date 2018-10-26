@@ -15,7 +15,8 @@ int main()
     // et le nombre le plus loin de x, dans le cas ou x = 50 et que nous avons 51 et 19 par exemple
     // donc deux nombres, dont un superieur a x et l'autre inferieur a x mais possèdant chacun exactement le même écard
     // vis à vis de x
-    // j'implémenterais le code nécessaire pour gérer ce genre de cas.
+    // pour l'instant, je n'implémenterais pas le code nécessaire pour gérer ce genre de cas.
+    //  suite à plusieurs tentatives de réalisation de cette algo... échouées
 
     int choixUser(0), tableau[5];
 
