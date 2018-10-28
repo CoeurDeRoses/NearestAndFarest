@@ -10,6 +10,8 @@ int main()
     string recommencer;
     do
     {
+    //Les nombres positifs sont uniquement pris en compte
+    //Pas de gestion d'erreur incluse
 
     //Le programme a pour but d'afficher le nombre le plus proche d'un nombre x déterminé par l'utilisateur
     // et le nombre le plus loin de x. Dans le cas ou x = 50 et que nous avons 51 et 49 par exemple
@@ -22,12 +24,11 @@ int main()
     //lePlusLoin bahhh euuu pour stocker le plus loin :D
     //lePlusProche bahhhh euu pour stocker le plus proche :D
     //Ces variables seront aux format string pour faire des concaténation
-    // si le cas expliquer juste en haut dans les commentaires arrive
+    // si le cas d'équidistance expliquer juste en haut dans les commentaires arrive
 
 
     //Variables qui serviront au traitenement pour les résultat finaux
     std::string lePlusLoin(""), lePlusProche("");
-    int plusPetitEcart(0), plusGrandEcard(0);
 
     cout << "Tapez le nombre qui servira de comparaison avec les autres " << endl;
     cout << "le programme determinera quel est le plus proche et quel " << endl;
@@ -42,7 +43,7 @@ int main()
     }
 
     //Je vais faire rendre le code apte de la manière suivante pour générer le cas à deux nombre équidistants de X
-    //un for va gérer le nombre le plus loin et un autre le plus proche de  x inferieur à celui ci
+    //un for va gérer le nombre le plus loin et le plus proche de  x inferieur à celui ci
     // par exemple X vaut 50 et on a 10 et 45 avec les variables nécessaires
 
     std::string lePlusLoinSousX(""), lePlusProcheSousX("");
@@ -70,28 +71,44 @@ int main()
         // superieur a x elle vaudra encore zero au premier tour et la condition dans plusPetitEcartSousX>CalculEcart(X,tableau[i])
         // sera invalide, c'est pour ça que je la code a part
 
-        //Je n'ai pas besoin de faire quelque chose de spécial pour la variable plus grand écart sousX car même initaliser à 0
-        // elle est voué à voir sa valeure croître
+
         if(i==0)
         {
+            //à la première itération je vais en réalité mettre des valeurs relatives aux variables
+            //plusPetitEcartSousX et lePlusProcheSousX pour que la comparaison et du sens après le tour i=0
+            // pareil pour les variables relatives aux plus grand ecart sous x
 
-            plusPetitEcartSousX = CalculEcart(X, tableau[i]);
-            lePlusProcheSousX = std::to_string(tableau[i]);
+            for(int j(0); j<5;j++)
+            {
+                if(tableau[j]<X)
+                {
+                plusPetitEcartSousX = CalculEcart(X, tableau[j]);
+                lePlusProcheSousX = std::to_string(tableau[j]);
+
+                plusGrandEcardSousX = CalculEcart(X, tableau[j]);
+                lePlusLoinSousX = std::to_string(tableau[j]);
+
+                }
+
+                //Même logiques pour les nombres superieur à x
+                if(tableau[j]>X)
+                {
+                plusPetitEcartOverX = CalculEcart(X, tableau[j]);
+                lePlusProcheOverX = std::to_string(tableau[j]);
+
+                plusGrandEcardOverX = CalculEcart(X, tableau[j]);
+                lePlusLoinOverX = std::to_string(tableau[j]);
+                }
+
+            }
+
+
         }
 
-        if(i==0 && tableau[i]<X)
-        {
-            //Les affections n'auront aucun sens dans ce if
-            // mais c'est juste histoire d'avoir une valeur dans chaque variables
-            // pour démarrer les comparaison après le premier tour
 
-            plusGrandEcardSousX = CalculEcart(X, tableau[i]);
-
-            lePlusLoinSousX = std::to_string(tableau[i]);
-        }
 
         //Les comparaisons peuvent débuter
-        if(i>0 && tableau[i]<X)
+        if(i>=0 && tableau[i]<X)
         {
 
             //Si le nombre dans l'itération actuel possède un plus petit écard
@@ -104,8 +121,8 @@ int main()
                   plusPetitEcartSousX = CalculEcart(X,tableau[i]);
                   lePlusProcheSousX = std::to_string(tableau[i]);
 
-            }
 
+            }
 
             if(plusGrandEcardSousX<CalculEcart(X,tableau[i]))
             {
@@ -116,12 +133,73 @@ int main()
             }
 
         }
+
+        if(i>0 && tableau[i]>X)
+        {
+            if(plusPetitEcartOverX>CalculEcart(X,tableau[i]))
+            {
+
+                plusPetitEcartOverX = CalculEcart(X, tableau[i]);
+                lePlusProcheOverX = std::to_string(tableau[i]);
+
+            }
+
+
+            if(plusGrandEcardOverX<CalculEcart(X,tableau[i]))
+            {
+                plusGrandEcardOverX = CalculEcart(X, tableau[i]);
+                lePlusLoinOverX = std::to_string(tableau[i]);
+            }
+        }
+
     }
 
+    //Ici on détermine si il y'a des équidistances
 
-     cout << "Le plus proche est: "<<lePlusProcheSousX << endl;
-     cout << "Le plus loin est: "<<lePlusLoinSousX << endl;
-     cout << "Voulez vous recommencer ?Tapez Tapez la lettre o  pour recommecer ou une autre pour arreter."<<endl;
+    //Les 2 nombres a plus petit ecart de x sont t-il équidistants ?
+    if(plusPetitEcartOverX>plusPetitEcartSousX)
+    {
+        lePlusProche= lePlusProcheSousX;
+    }
+
+    if(plusPetitEcartOverX<plusPetitEcartSousX)
+    {
+        lePlusProche= lePlusLoinOverX;
+    }
+
+    if(plusPetitEcartOverX==plusPetitEcartSousX)
+    {
+        lePlusProche= lePlusProcheOverX +" et "+lePlusProcheSousX+"possèdant un ecart de "
+                + std::to_string(plusPetitEcartOverX)+" chacun a "+std::to_string(X);
+    }
+
+    //Les 2 nombres a plus grand ecart de x sont t-il équidistants ?
+
+    if(plusGrandEcardOverX<plusGrandEcardSousX)
+    {
+        lePlusLoin = lePlusLoinSousX;
+    }
+
+    if(plusGrandEcardOverX>plusGrandEcardSousX)
+    {
+        lePlusLoin = lePlusLoinOverX;
+    }
+
+    if(plusGrandEcardOverX==plusGrandEcardSousX)
+    {
+        lePlusLoin= lePlusLoinOverX+" et "+lePlusLoinSousX+" possedant un ecart de "
+                + std::to_string(plusGrandEcardOverX)+" chacun a "+std::to_string(X);
+    }
+
+    cout <<"le Plus Loin Sous X: "<<lePlusLoinSousX<< endl;
+    cout <<"le Plus Proche Sous X: "<<lePlusProcheSousX<< endl;
+    cout <<"le Plus Proche au dessus X: "<<lePlusProcheOverX<< endl;
+    cout <<"le Plus Loin au dessus X: "<<lePlusLoinOverX<< endl<< endl;
+
+
+     cout << "Le/les plus proche de x : "<<lePlusProche << endl;
+     cout << "Le/les plus loin de x : "<<lePlusLoin<< endl;
+     cout << "Voulez vous recommencer ?"<<endl<<" Tapez la lettre o  pour recommencer ou une autre pour arreter."<<endl;
      cout << "puis entrer pour confirmer: ";
 
      cin>>recommencer;
